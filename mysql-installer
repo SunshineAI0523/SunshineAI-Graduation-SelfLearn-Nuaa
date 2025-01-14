@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# 检查是否以root权限运行
+if [[ $EUID -ne 0 ]]; then
+    echo "请以root权限运行此脚本。"
+    exit 1
+fi
+
+# 获取Debian版本代号
+DEBIAN_CODENAME=$(lsb_release -sc)
+
+# 设置MySQL下载链接和相关参数
+case "$DEBIAN_CODENAME" in
+    bullseye)
+        MYSQL_VERSION="8.0.37"
+        MYSQL_TAR_URL="https://downloads.mysql.com/archives/get/p/23/file/mysql-server_${MYSQL_VERSION}-1debian11_amd64.deb-bundle.tar"
+        INSTALL_DIR="/SunshineAI/MySQL-Server-8-Debian11/"
+        ;;
+    bookworm)
+        MYSQL_VERSION="8.0.40"
+        MYSQL_TAR_URL="https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-server_${MYSQL_VERSION}-1debian12_amd64.deb-bundle.tar"
+        INSTALL_DIR="/SunshineAI/MySQL-Server-8-Debian12/"
+        ;;
+    *)
+        echo "不支持的Debian版本代号: $DEBIAN_CODENAME"
+        exit 1
+        ;;
+esac
+
+# 更新包列表
+echo "更新软件包列表..."
+sudo apt update
+
+# 下载MySQL安装包
+echo "下载MySQL ${MYSQL_VERSION} 安装包..."
+sudo mkdir -p /SunshineAI
+sudo wget "$MYSQL_TAR_URL" -O /SunshineAI/mysql-server_${MYSQL_VERSION}-1${DEBIAN_CODENAME}_amd64.deb-bundle.tar
+
+# 解压MySQL安装包
+echo "解压安装包到 $INSTALL_DIR..."
+sudo mkdir -p "$INSTALL_DIR"
+sudo tar -xvf /SunshineAI/mysql-server_${MYSQL_VERSION}-1${DEBIAN_CODENAME}_amd64.deb-bundle.tar -C "$INSTALL_DIR"
+sudo rm -rf /SunshineAI/mysql-server_${MYSQL_VERSION}-1${DEBIAN_CODENAME}_amd64.deb-bundle.tar
+
+# 安装必要依赖
+echo "安装必要依赖..."
+sudo apt-get install -y libaio1 libcommon-sense-perl libjson-perl libjson-xs-perl libmecab2 libtirpc-common libtirpc3 libtypes-serialiser-perl mecab-ipadic mecab-ipadic-utf8 mecab-utils
+
+# 安装MySQL
+echo "安装包解压完成,安装中..."
+cd "$INSTALL_DIR" && tree 
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/root_password password 1234567890'
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/root_password_again password 1234567890'
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)'
+sudo DEBIAN_FRONTEND=noninteractive dpkg -i *.deb 
+sudo DEBIAN_FRONTEND=noninteractive apt install -f -y
+sudo rm -rf /SunshineAI/mysql-server_${MYSQL_VERSION}-1${DEBIAN_CODENAME}_amd64.deb-bundle.tar
+sudo rm -rf /SunshineAI/"$INSTALL_DIR"/*
+
+# 检查MySQL是否安装成功
+if systemctl is-active --quiet mysql; then
+    echo "MySQL ${MYSQL_VERSION} 安装完成并已启动。"
+else
+    echo "MySQL ${MYSQL_VERSION} 安装失败，请检查日志。"
+fi

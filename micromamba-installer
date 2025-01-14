@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Function to detect the OS and architecture
+detect_os_arch() {
+  OS="$(uname | tr '[:upper:]' '[:lower:]')"
+  ARCH="$(uname -m)"
+
+  case "$ARCH" in
+    x86_64)
+      ARCH="64"
+      ;;
+    aarch64|arm64)
+      ARCH="aarch64"
+      ;;
+    ppc64le)
+      ARCH="ppc64le"
+      ;;
+    *)
+      echo "Unsupported architecture: $ARCH"
+      exit 1
+      ;;
+  esac
+
+  if [[ "$OS" == "darwin" ]]; then
+    if [[ "$ARCH" == "64" ]]; then
+      OS_ARCH="osx-64"
+    elif [[ "$ARCH" == "aarch64" ]]; then
+      OS_ARCH="osx-arm64"
+    fi
+  elif [[ "$OS" == "linux" ]]; then
+    OS_ARCH="linux-$ARCH"
+  else
+    echo "Unsupported operating system: $OS"
+    exit 1
+  fi
+
+  echo $OS_ARCH
+}
+
+# Main script
+main() {
+  OS_ARCH=$(detect_os_arch)
+  
+  DOWNLOAD_URL="https://micro.mamba.pm/api/micromamba/$OS_ARCH/latest"
+  TARGET_DIR="micromamba_$OS_ARCH"
+  TAR_FILE="micromamba_$OS_ARCH.tar.bz2"
+
+  # Create target directory
+  mkdir -p "$TARGET_DIR"
+
+  # Download the file
+  echo "Downloading micromamba for $OS_ARCH..."
+  curl -Ls "$DOWNLOAD_URL" -o "$TARGET_DIR/$TAR_FILE"
+
+  # Extract the binary
+  echo "Extracting micromamba binary..."
+  tar -xvj -C "$TARGET_DIR" -f "$TARGET_DIR/$TAR_FILE" bin/micromamba
+
+  echo "Micromamba has been downloaded and extracted to $TARGET_DIR."
+}
+
+main

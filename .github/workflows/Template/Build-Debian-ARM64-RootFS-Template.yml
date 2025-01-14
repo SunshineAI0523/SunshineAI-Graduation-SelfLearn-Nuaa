@@ -1,0 +1,41 @@
+name: Build Debian ARM64 RootFS
+
+on:
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  build-rootfs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static debootstrap
+
+      - name: Create working directory
+        run: mkdir -p rootfs
+
+      - name: Bootstrap Debian rootfs
+        run: |
+          sudo debootstrap --variant=minbase --arch=arm64 bookworm rootfs http://deb.debian.org/debian
+
+      - name: Install basic packages
+        run: |
+          sudo chroot rootfs /bin/bash -c "apt-get update && apt-get install -y \
+            sudo bash-completion curl wget nano vim \
+            locales tzdata openssh-server"
+
+      - name: Create tarball
+        run: |
+          cd rootfs
+          sudo tar --numeric-owner -cvf ../debian-rootfs-arm64.tar .
+          cd ..
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-arm64-rootfs
+          path: debian-rootfs-arm64.tar
