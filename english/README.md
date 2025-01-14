@@ -1,73 +1,92 @@
----
-time: 2023-12-30 13:00:00
-category: 项目 
-tag:
-    - 南京航空航天大学
-    - 毕业设计
----
-# Project Name - 项目名称
-南京航空航天大学继续教育学院自学考试本科阶段毕业设计    
-## Description - 描述
-南京航空航天大学自学考试本科阶段毕业设计 
-## Introduction - 介绍
-创建南京航空航天大学继续教育学院自学考试本科阶段毕业设计这个项目是希望可以记录一下自己论文撰写和软件编程学习的过程，同时作为毕业设计相关文件夹的一个备份。
-## Requirements - 必要条件（环境，对所有项目，和所有子模块和库的描述。）
-Rocky Linux 9.x；
-Nginx 1.24.1；
-MySQL 8.x/MariaDB 10.11.x；
-jdk 17；
-## Configuration - 配置（配置信息。2）
-SSH Port 22;
-Nginx Port 80;
-MySQL Port 3306;
-Cockpit Port 9090;
-## Installation - 安装（如何安装。）
-前端：
-1. 安装Node.js；
-2. 进入项目目录；
-3. 执行npm install；
-4. 执行npm run build；
-5. 将前端项目根目录中的dist文件夹中的内容拷贝至nginx网站根目录；
-后端：
-1. 安装MySQL；
-2. 安装jdk；
-3. 修改数据库配置文件；
-4. 修改后端项目配置文件；
-5. 执行mvn clean install；
-6. 执行java -jar target/xxx.jar；
-7. 访问后端项目接口；
-## Usage - 用法（用法。）
-使用浏览器直接登录服务器IP即可
-如使用特殊端口，则需要使用IP:端口进行访问
-## Changelog - 更新日志（一个简短的历史记录（更改，替换或者其他）。）
 
-## FAQ - 常见问题（常见问题。）
+## 项目简介 / Project Introduction
 
-## Support - 支持
+中文：
+本项目是一个基于 SpringBoot 和 Vue.js 开发的现代化房屋租赁管理系统。系统提供房源管理、租赁合同管理、租金收付、维修管理等功能，旨在为房东和租客提供便捷的租赁服务平台。
 
-### Dos - 文档（更多文档。）
+English:
+This project is a modern house rental management system developed using SpringBoot and Vue.js. The system provides features such as property management, lease contract management, rent payment processing, and maintenance management, aiming to provide a convenient rental service platform for landlords and tenants.
 
-## Authors and acknowledgment - 贡献者和感谢（作者列表和鸣谢。）
-Author: Matrix0523
-## License - 版权信息（版权和许可信息（或阅读许可证）、法律声明。）
+## 开发环境 / Development Environment
+
+### 服务器环境 / Server Environment
+- Debian Linux 
+- Nginx 1.24.1
+- MySQL 8.x/MariaDB 10.11.x
+- JDK 
+
+### 开发工具 / Development Tools
+- 后端 / Backend：
+  - Spring Boot
+  - Maven
+  - MySQL/MariaDB
+  
+- 前端 / Frontend：
+  - Vue.js
+  - Node.js
+  - npm
+
+## 系统配置 / System Configuration
+
+- SSH: 22
+- Nginx: 80
+- MySQL: 3306
+- Cockpit: 9090
+
+## 部署指南 / Deployment Guide
+
+### 前端部署 / Frontend Deployment
+
+中文：
+1. 安装 Node.js 环境
+2. 进入前端项目目录
+3. 安装项目依赖：`npm install`
+4. 构建生产环境代码：`npm run build`
+5. 将 dist 目录下的文件部署到 Nginx
+
+English:
+1. Install Node.js environment
+2. Navigate to frontend project directory
+3. Install dependencies: `npm install`
+4. Build for production: `npm run build`
+5. Deploy dist directory files to Nginx
+
+### 后端部署 / Backend Deployment
+
+中文：
+1. 安装 JDK 
+2. 安装并配置 MySQL/MariaDB
+3. 修改数据库连接配置
+4. 编译项目：`mvn clean install`
+5. 运行 JAR 文件：`java -jar target/xxx.jar`
+
+English:
+1. Install JDK 17
+2. Install and configure MySQL/MariaDB
+3. Modify database connection settings
+4. Build project: `mvn clean install`
+5. Run JAR file: `java -jar target/xxx.jar`
+
+## 使用说明 / Usage Guide
+
+中文：
+1. 通过浏览器访问系统地址
+2. 默认使用 80 端口访问
+3. 如使用其他端口，需要在地址后添加端口号
+
+English:
+1. Access system through web browser
+2. Default access through port 80
+3. If using different port, add port number to address
+
+## 作者 / Author
+
+Matrix0523
+
+## 许可证 / License
+
 MIT License
 
-Copyright (c) 2023 Matrix0523
+Copyright (c) 2024 Matrix0523
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+[MIT License 完整内容请参见项目根目录的 LICENSE 文件 / For the full MIT License text, please see the LICENSE file in the project root directory]
