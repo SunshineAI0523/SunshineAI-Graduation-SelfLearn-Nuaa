@@ -11,6 +11,17 @@
 			"installMaven": "true",
 			"mavenVersion": "3.8.6",
 			"installGradle": "false"
+		},
+		"ghcr.io/devcontainers/features/common-utils:2": {
+		          "installZsh": "boolean",
+		          "configureZshAsDefaultShell": "false",
+		          "installOhMyZsh": "true",
+		          "installOhMyZshConfig": "true",
+		          "upgradePackages": "true",
+		          "username": "administrator",
+		          "userUid": "1002",
+		          "userGid": "1002",
+		          "nonFreePackages": "true"
 		}
 	},
 	// Configure tool-specific properties.
