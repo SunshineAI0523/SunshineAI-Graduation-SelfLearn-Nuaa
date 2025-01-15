@@ -1,58 +1,58 @@
 // // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // // README at: https://github.com/devcontainers/templates/tree/main/src/java
 {
-	// "name": "SunshineAI-Graduation-SelfLearn-Nuaa",
+	"name": "SunshineAI-Graduation-SelfLearn-Nuaa",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	// "image": "jamesmith0817/debian-rootfs-distrobox",
-	// "features": {
-		// "ghcr.io/devcontainers/features/java:1": {
-			// "version": "8",
-			// "jdkDistro": "tem",
-			// "installMaven": "true",
-			// "mavenVersion": "3.8.6",
-			// "installGradle": "false"
-		// }
-	// },
+	"image": "jamesmith0817/debian-rootfs-distrobox",
+	"features": {
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "8",
+			"jdkDistro": "tem",
+			"installMaven": "true",
+			"mavenVersion": "3.8.6",
+			"installGradle": "false"
+		}
+	},
 	// Configure tool-specific properties.
-	// "customizations": {
+	"customizations": {
 		// Configure properties specific to VS Code.
-		// "vscode": {
-			// "settings": {},
-			// "extensions": [
-				// "streetsidesoftware.code-spell-checker",
-				// "ms-vscode-remote.remote-containers",
-				// "ms-vscode-remote.vscode-remote-extensionpack",
-				// "ms-vscode.remote-server",
-				// "ms-vscode-remote.remote-ssh",
-				// "ms-vscode.remote-explorer",
-				// "ms-vscode.remote-repositories",
-				// "ms-vscode-remote.remote-ssh-edit",
-				// "ms-azuretools.vscode-docker",
-				// "RooVeterinaryInc.roo-cline",
-				// "github.vscode-github-actions",
-				// "vscjava.vscode-java-pack",
-				// "vscjava.vscode-spring-initializr",
-				// "vscjava.vscode-java-test",
-				// "vscjava.vscode-maven",
-				// "vscjava.vscode-java-debug",
-				// "vscjava.vscode-java-dependency",
-				// "redhat.java",
-				// "vscjava.vscode-spring-boot-dashboard",
-				// "vmware.vscode-spring-boot",
-				// "vmware.vscode-boot-dev-pack"
-				// "saoudrizwan.claude-dev",				
-			// ]
-		// }
-	// },
+		"vscode": {
+			"settings": {},
+			"extensions": [
+				"streetsidesoftware.code-spell-checker",
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode-remote.vscode-remote-extensionpack",
+				"ms-vscode.remote-server",
+				"ms-vscode-remote.remote-ssh",
+				"ms-vscode.remote-explorer",
+				"ms-vscode.remote-repositories",
+				"ms-vscode-remote.remote-ssh-edit",
+				"ms-azuretools.vscode-docker",
+				"RooVeterinaryInc.roo-cline",
+				"github.vscode-github-actions",
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-spring-initializr",
+				"vscjava.vscode-java-test",
+				"vscjava.vscode-maven",
+				"vscjava.vscode-java-debug",
+				"vscjava.vscode-java-dependency",
+				"redhat.java",
+				"vscjava.vscode-spring-boot-dashboard",
+				"vmware.vscode-spring-boot",
+				"vmware.vscode-boot-dev-pack",
+				"saoudrizwan.claude-dev"			
+			]
+		}
+	},
 
-	// "workspaceFolder": "/SunshineAI/SunshineAI-Developer-Container",
+	"workspaceFolder": "/SunshineAI/SunshineAI-Graduation-SelfLearn-Nuaa",
 
 // 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-// 	"forwardPorts": [],
+	"forwardPorts": [80,443,3306],
 
 // 	// Use 'postCreateCommand' to run commands after the container is created.
-// 	"postCreateCommand": "java -version",
+	"postCreateCommand": "java -version",
 
 // 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	"remoteUser": "Administrator"
 }
