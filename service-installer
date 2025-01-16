@@ -1,9 +1,9 @@
-#!/bin/bash
-sudo chmod +x /etc/init.d/mysql
-sudo chmod +x /etc/init.d/ollama
-mkdir /var/log/ollama
-touch /var/log/ollama/ollama.log
-sudo chown ollama:ollama /var/log/ollama/ollama.log
-sudo chown -R ollama:ollama /var/log/ollama/
-sudo update-rc.d ollama defaults
-sudo update-rc.d mysql defaults
+# #!/bin/bash
+# sudo chmod +x /etc/init.d/mysql
+# # sudo chmod +x /etc/init.d/ollama
+# # mkdir /var/log/ollama
+# # touch /var/log/ollama/ollama.log
+# # sudo chown ollama:ollama /var/log/ollama/ollama.log
+# # sudo chown -R ollama:ollama /var/log/ollama/
+# # sudo update-rc.d ollama defaults
+# sudo update-rc.d mysql defaults

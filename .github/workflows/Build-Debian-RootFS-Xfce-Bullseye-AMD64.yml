@@ -146,9 +146,10 @@ jobs:
           sudo chmod 777 ./rootfs/bin/service-installer
           sudo cp init.d/mysql ./rootfs/etc/init.d/mysql
           sudo cp init.d/ollama ./rootfs/etc/init.d/ollama
+          sudo cp wsl.conf ./rootfs/etc/wsl.conf
+          sudo chmod 644 ./rootfs/etc/wsl.conf          
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/mysql-installer-sunshineai"
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/redis-installer-sunshineai"
-          sudo chroot rootfs /bin/bash -c "sudo bash /bin/service-installer"
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/image-cleaner"
           sudo umount -lf ./rootfs/dev
           sudo umount -lf ./rootfs/proc
