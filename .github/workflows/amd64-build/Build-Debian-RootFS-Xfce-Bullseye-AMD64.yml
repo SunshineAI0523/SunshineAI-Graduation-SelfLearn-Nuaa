@@ -124,16 +124,16 @@ jobs:
           sudo mount --bind /proc ./rootfs/proc
           sudo mount --bind /sys ./rootfs/sys
           sudo mount --bind /dev/pts ./rootfs/dev/pts
-          sudo cp ./mysql-installer ./rootfs/usr/bin/mysql-installer-sunshineai
-          sudo cp ./mysql-installer ./rootfs/bin/mysql-installer-sunshineai
+          sudo cp ./scripts/mysql-installer ./rootfs/usr/bin/mysql-installer-sunshineai
+          sudo cp ./scripts/mysql-installer ./rootfs/bin/mysql-installer-sunshineai
           sudo chmod 777 ./rootfs/usr/bin/mysql-installer-sunshineai
           sudo chmod 777 ./rootfs/bin/mysql-installer-sunshineai
-          sudo cp ./micromamba-installer ./rootfs/usr/bin/micromamba-installer-sunshineai
-          sudo cp ./micromamba-installer ./rootfs/bin/micromamba-installer-sunshineai
+          sudo cp ./scripts/micromamba-installer ./rootfs/usr/bin/micromamba-installer-sunshineai
+          sudo cp ./scripts/micromamba-installer ./rootfs/bin/micromamba-installer-sunshineai
           sudo chmod 777 ./rootfs/usr/bin/micromamba-installer-sunshineai
           sudo chmod 777 ./rootfs/bin/micromamba-installer-sunshineai
-          sudo cp ./redis-installer ./rootfs/usr/bin/redis-installer-sunshineai
-          sudo cp ./redis-installer ./rootfs/bin/redis-installer-sunshineai
+          sudo cp ./scripts/redis-installer ./rootfs/usr/bin/redis-installer-sunshineai
+          sudo cp ./scripts/redis-installer ./rootfs/bin/redis-installer-sunshineai
           sudo chmod 777 ./rootfs/usr/bin/redis-installer-sunshineai 
           wget https://hf-mirror.com/hfd/hfd.sh
           sudo cp hfd.sh ./rootfs/usr/bin/hfd 
@@ -146,9 +146,10 @@ jobs:
           sudo chmod 777 ./rootfs/bin/service-installer
           sudo cp init.d/mysql ./rootfs/etc/init.d/mysql
           sudo cp init.d/ollama ./rootfs/etc/init.d/ollama
+          sudo cp wsl.conf ./rootfs/etc/wsl.conf
+          sudo chmod 644 ./rootfs/etc/wsl.conf          
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/mysql-installer-sunshineai"
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/redis-installer-sunshineai"
-          sudo chroot rootfs /bin/bash -c "sudo bash /bin/service-installer"
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/image-cleaner"
           sudo umount -lf ./rootfs/dev
           sudo umount -lf ./rootfs/proc

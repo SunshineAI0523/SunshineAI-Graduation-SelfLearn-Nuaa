@@ -15,16 +15,27 @@
 SERVICE_NAME="Ollama"
 OLLAMA_COMMAND="/usr/bin/ollama" # Update with the path to the Ollama serve command
 PID_FILE="/var/run/ollama/ollama.pid"
+LOG_FILE="/var/log/ollama/ollama.log"
 USER="ollama"
 GROUP="ollama"
 
 start_service() {
     echo "Starting $SERVICE_NAME..."
+    
+    # Ensure required directories exist
+    mkdir -p /var/run/ollama
+    mkdir -p /var/log/ollama
+
+    # Set proper ownership and permissions for directories
+    chown -R $USER:$GROUP /var/run/ollama
+    chown -R $USER:$GROUP /var/log/ollama
+
     if [ -f "$PID_FILE" ]; then
         echo "$SERVICE_NAME is already running."
         return 1
     fi
-    su -s /bin/bash -c "nohup $OLLAMA_COMMAND serve> /var/log/ollama/ollama.log 2>&1 & echo \$! > $PID_FILE" $USER
+    
+    su -s /bin/bash -c "nohup $OLLAMA_COMMAND serve > $LOG_FILE 2>&1 & echo \$! > $PID_FILE" $USER
     echo "$SERVICE_NAME started with PID $(cat $PID_FILE)."
 }
 
