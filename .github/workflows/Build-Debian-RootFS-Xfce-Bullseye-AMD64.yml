@@ -19,7 +19,7 @@ jobs:
           # wget https://raw.githubusercontent.com/actions/runner-images/refs/heads/main/images/ubuntu/toolsets/toolset-2004.json
           # APT_PACKAGES=`cat toolset-2004.json | jq -r '.apt | [.vital_packages[], .common_packages[], .cmd_packages[]] | del(.[] | select(. == "lib32z1")) | join(" ")'`
           # sudo apt update && sudo apt-get purge -y ${APT_PACKAGES} && df -h
-          sudo bash ./envcleaner.sh
+          sudo bash ./scripts/envcleaner.sh
 
       - name: Set up QEMU user mode emulator (for debootstrap)
         run: sudo apt-get update && sudo apt-get install -y sudo qemu-user-static qemu-utils qemu-system-common debootstrap && tree && df -h 
