@@ -1,9 +1,9 @@
 name: Build-sunshineai-debian-bullseye-AMD64
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:  # 你可以根据需要触发这个工作流，例如通过手动触发
 
 jobs:

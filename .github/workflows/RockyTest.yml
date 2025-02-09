@@ -1,0 +1,116 @@
+name: Build RockyLinux WSL Docker Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKER_PASSWORD }}
+  OLLAMA_VERSION: "0.1.27"
+  MYSQL_ROOT_PASSWORD: "your_secure_password"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/rockylinux:9
+      options: --privileged --device=/dev/fuse
+
+    steps:
+    - name: Prepare environment
+      run: |
+        dnf install -y dnf-plugins-core tar xz curl shadow-utils \
+        glibc-langpack-en systemd-container git docker
+
+    - name: Initialize rootfs
+      run: |
+        mkdir -p /rootfs/{etc,var/lib/rpm}
+        rpm --root /rootfs --initdb
+        dnf install -y --releasever 9 --installroot /rootfs \
+        --setopt=install_weak_deps=False --nodocs \
+        rocky-release
+
+    - name: Configure repositories
+      run: |
+        cp /etc/yum.repos.d/rocky* /rootfs/etc/yum.repos.d/
+        chroot /rootfs dnf config-manager --set-enabled crb
+        chroot /rootfs dnf install -y epel-release
+
+    - name: Install base packages
+      run: |
+        chroot /rootfs dnf install -y \
+        bash-completion bc bzip2 curl diffutils findutils \
+        glibc-locale-source glibc-langpack-en gnupg hostname \
+        iputils keyutils less libvte-2* lsof man man-pages mtr \
+        ncurses nss-mdns openssh-clients pam pam-extra pigz \
+        pinentry procps-ng rsync shadow-utils sudo systemd time \
+        tzdata tree unzip util-linux wget words xauth zip \
+        Mesa-dri libvulkan libvulkan-intel libvulkan-radeon \
+        mysql-server redis --setopt=tsflags=nodocs
+
+    - name: Install Ollama
+      run: |
+        curl -L "https://github.com/ollama/ollama/releases/download/v${OLLAMA_VERSION}/ollama-linux-amd64" \
+        -o ollama.tar.gz
+        tar -xzvf ollama.tar.gz -C /rootfs/usr/bin/
+        chmod +x /rootfs/usr/bin/ollama
+
+    - name: System configuration
+      run: |
+        # Locale and time
+        echo "LANG=en_US.UTF-8" > /rootfs/etc/locale.conf
+        chroot /rootfs localedef -c -i en_US -f UTF-8 en_US.UTF-8
+        ln -sf /usr/share/zoneinfo/UTC /rootfs/etc/localtime
+
+        # WSL config
+        echo -e "[automount]\nenabled = true" > /rootfs/etc/wsl.conf
+        echo "rocky-test" > /rootfs/etc/hostname
+
+        # MySQL configuration
+        echo "[mysqld]" >> /rootfs/etc/my.cnf
+        echo "skip-name-resolve" >> /rootfs/etc/my.cnf
+        chroot /rootfs systemctl enable mysqld
+
+        # Redis configuration
+        chroot /rootfs systemctl enable redis
+
+        # Sudo configuration
+        echo "%wheel ALL=(ALL) ALL" >> /rootfs/etc/sudoers.d/wheel
+        chmod 440 /rootfs/etc/sudoers.d/wheel
+
+    - name: Initialize services
+      run: |
+        # Initialize MySQL
+        chroot /rootfs /usr/libexec/mysqld --initialize-insecure \
+        --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+        echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';" \
+        > /rootfs/root/mysql-init.sql
+
+    - name: Cleanup
+      run: |
+        chroot /rootfs dnf clean all
+        rm -rf /rootfs/var/cache/dnf/*
+        find /rootfs/usr/share/{doc,man} -type f -delete
+
+    - name: Build Docker image
+      run: |
+        tar --numeric-owner --xattrs --acls -C /rootfs -cvpf rootfs.tar .
+        cat <<EOF > Dockerfile
+        FROM scratch
+        ADD rootfs.tar /
+        ENV LANG=en_US.UTF-8
+        CMD ["/usr/lib/systemd/systemd"]
+        EOF
+
+        docker build -t $DOCKER_USERNAME/rocky-test:latest .
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker push $DOCKER_USERNAME/rocky-test:latest
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: rocky-test-rootfs
+        path: rootfs.tar
