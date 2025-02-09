@@ -23,7 +23,7 @@ jobs:
     - name: Prepare environment
       run: |
         dnf install -y --allowerasing dnf-plugins-core tar xz curl shadow-utils \
-        glibc-langpack-en systemd-container git docker 
+        glibc-langpack-en systemd-container git docker sudo
 
     - name: Initialize rootfs
       run: |
