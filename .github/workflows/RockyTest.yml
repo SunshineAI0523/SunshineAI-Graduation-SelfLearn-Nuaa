@@ -29,18 +29,33 @@ jobs:
       run: |
         mkdir -p /rootfs/{etc,var/lib/rpm}
         rpm --root /rootfs --initdb
+        sudo mount --bind /dev /rootfs/dev
+        sudo mount --bind /proc /rootfs/proc
+        sudo mount --bind /sys /rootfs/sys
         dnf install -y --releasever 9 --installroot /rootfs \
         --setopt=install_weak_deps=False --nodocs \
         rocky-release sudo dnf* 
+        sudo umount -lf /rootfs/dev
+        sudo umount -lf /rootfs/proc
+        sudo umount -lf /rootfs/sys
 
     - name: Configure repositories
       run: |
+        sudo mount --bind /dev /rootfs/dev
+        sudo mount --bind /proc /rootfs/proc
+        sudo mount --bind /sys /rootfs/sys
         cp /etc/yum.repos.d/rocky* /rootfs/etc/yum.repos.d/
         chroot /rootfs sudo dnf config-manager --set-enabled crb
         chroot /rootfs sudo dnf install -y epel-release
+        sudo umount -lf /rootfs/dev
+        sudo umount -lf /rootfs/proc
+        sudo umount -lf /rootfs/sys
 
     - name: Install base packages
       run: |
+        sudo mount --bind /dev /rootfs/dev
+        sudo mount --bind /proc /rootfs/proc
+        sudo mount --bind /sys /rootfs/sys
         chroot /rootfs sudo dnf install -y \
         bash-completion bc bzip2 curl diffutils findutils \
         glibc-locale-source glibc-langpack-en gnupg hostname \
@@ -50,6 +65,9 @@ jobs:
         tzdata tree unzip util-linux wget words xauth zip \
         Mesa-dri libvulkan libvulkan-intel libvulkan-radeon \
         mysql-server redis --setopt=tsflags=nodocs
+        sudo umount -lf /rootfs/dev
+        sudo umount -lf /rootfs/proc
+        sudo umount -lf /rootfs/sys
 
     - name: Install Ollama
       run: |
@@ -60,6 +78,9 @@ jobs:
 
     - name: System configuration
       run: |
+        sudo mount --bind /dev /rootfs/dev
+        sudo mount --bind /proc /rootfs/proc
+        sudo mount --bind /sys /rootfs/sys
         # Locale and time
         echo "LANG=en_US.UTF-8" > /rootfs/etc/locale.conf
         chroot /rootfs localedef -c -i en_US -f UTF-8 en_US.UTF-8
@@ -80,20 +101,35 @@ jobs:
         # Sudo configuration
         echo "%wheel ALL=(ALL) ALL" >> /rootfs/etc/sudoers.d/wheel
         chmod 440 /rootfs/etc/sudoers.d/wheel
+        sudo umount -lf /rootfs/dev
+        sudo umount -lf /rootfs/proc
+        sudo umount -lf /rootfs/sys
 
     - name: Initialize services
       run: |
+        sudo mount --bind /dev /rootfs/dev
+        sudo mount --bind /proc /rootfs/proc
+        sudo mount --bind /sys /rootfs/sys
         # Initialize MySQL
         chroot /rootfs /usr/libexec/mysqld --initialize-insecure \
         --user=mysql --basedir=/usr --datadir=/var/lib/mysql
         echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';" \
         > /rootfs/root/mysql-init.sql
+        sudo umount -lf /rootfs/dev
+        sudo umount -lf /rootfs/proc
+        sudo umount -lf /rootfs/sys
 
     - name: Cleanup
       run: |
+        sudo mount --bind /dev /rootfs/dev
+        sudo mount --bind /proc /rootfs/proc
+        sudo mount --bind /sys /rootfs/sys
         chroot /rootfs dnf clean all
         rm -rf /rootfs/var/cache/dnf/*
         find /rootfs/usr/share/{doc,man} -type f -delete
+        sudo umount -lf /rootfs/dev
+        sudo umount -lf /rootfs/proc
+        sudo umount -lf /rootfs/sys
 
     - name: Build Docker image
       run: |
