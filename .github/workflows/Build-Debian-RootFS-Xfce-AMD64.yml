@@ -1,4 +1,4 @@
-name: Build-Debian-RootFS-Xfce-AMD64
+name: Build-sunshineai-debian-bookworm-AMD64
 
 on:
   push:
@@ -173,8 +173,8 @@ jobs:
         id: vars
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-          IMAGE_NAME="debian-rootfs-xfce:$TIMESTAMP"
-          LATEST_IMAGE="debian-rootfs-xfce:latest"
+          IMAGE_NAME="sunshineai-debian-bookworm:$TIMESTAMP"
+          LATEST_IMAGE="sunshineai-debian-bookworm:xfce"
           FULL_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/$IMAGE_NAME"
           LATEST_FULL_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/$LATEST_IMAGE"
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
@@ -184,7 +184,7 @@ jobs:
       - name: Check if Image Exists
         id: check-image
         run: |
-          IMAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" "https://${{ secrets.DOCKER_REGISTRY }}/v2/debian-rootfs-xfce/tags/list" | grep -c "200")
+          IMAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" "https://${{ secrets.DOCKER_REGISTRY }}/v2/sunshineai-debian-bookworm/tags/list" | grep -c "200")
           if [ "$IMAGE_EXISTS" -eq 0 ]; then
             echo "Image does not exist. It will be created."
           else
