@@ -1,4 +1,4 @@
-name: Build-Debian-RootFS-DistroBox-AMD64
+name: Build-sunshineai-debian-bookworm-AMD64
 
 on:
   push:
@@ -20,12 +20,12 @@ jobs:
           # APT_PACKAGES=`cat toolset-2004.json | jq -r '.apt | [.vital_packages[], .common_packages[], .cmd_packages[]] | del(.[] | select(. == "lib32z1")) | join(" ")'`
           # sudo apt update && sudo apt-get purge -y ${APT_PACKAGES} && df -h
           sudo bash ./scripts/envcleaner.sh
-
+        
       - name: Set up QEMU user mode emulator (for debootstrap)
         run: sudo apt-get update && sudo apt-get install -y sudo qemu-user-static qemu-utils qemu-system-common debootstrap && tree && df -h 
 
       - name: Create working directory
-        run: mkdir -p rootfs && tree 
+        run: mkdir -p rootfs && tree
 
       - name: Bootstrap Debian rootfs
         run: |
@@ -37,14 +37,14 @@ jobs:
           set -e
           sudo chroot rootfs /bin/bash -c "
             apt-get update &&
-            apt-get install -y gcc*multilib g++*multilib gcc*x86-64*linux*gnu g++*x86-64*linux*gnu tree progress apt-mirror libqt5dbus5 libqt5core5a libqt5gui5 libqt5widgets5 openssh* debootstrap dbus* curl* wget* sysvinit-utils sudo flatpak* software-properties-common lsb-release* libvte-* ca-certificates locales-all locales build-e* fonts-noto* fonts-wqy* nano tasksel* apt-utils xrdp* bash-completion bc bzip2 curl dialog diffutils findutils gnupg gnupg2 gpgsm hostname iproute2 iputils-ping keyutils less libcap2-bin libkrb5-3 libnss-mdns libnss-myhostname libvte-common locales lsof man-db manpages mtr ncurses-base openssh-client passwd pigz pinentry-curses procps rsync sudo tcpdump time traceroute tree tzdata unzip util-linux wget xauth xz-utils zip libgl1 libegl1-mesa libgl1-mesa-glx libegl1 libglx-mesa0 libvulkan1 mesa-vulkan-drivers git git-lfs &&
+            apt-get install -y gcc*multilib g++*multilib gcc*x86-64*linux*gnu g++*x86-64*linux*gnu tree progress apt-mirror libqt5dbus5 libqt5core5a libqt5gui5 libqt5widgets5 openssh* debootstrap dbus* curl* wget* sysvinit-utils sudo chromium* flatpak* software-properties-common xfce* xf* lsb-release* libvte-* ca-certificates locales-all locales build-e* fonts-noto* fonts-wqy* nano tasksel* apt-utils xrdp* bash-completion bc bzip2 curl dialog diffutils findutils gnupg gnupg2 gpgsm hostname iproute2 iputils-ping keyutils less libcap2-bin libkrb5-3 libnss-mdns libnss-myhostname libvte-common locales lsof man-db manpages mtr ncurses-base openssh-client passwd pigz pinentry-curses procps rsync sudo tcpdump time traceroute tree tzdata unzip util-linux wget xauth xz-utils zip libgl1 libegl1-mesa libgl1-mesa-glx libegl1 libglx-mesa0 libvulkan1 mesa-vulkan-drivers git git-lfs &&
             sudo lsb_release -a && 
             sudo useradd -m "Administrator" -s /bin/bash && 
-            echo "Administrator:123456789" | sudo chpasswd &&
+            echo "Administrator:123456789" | sudo chpasswd && 
             echo "root:123456789" | sudo chpasswd && 
             sudo usermod -d /home/Administrator/ Administrator
           "
-      
+
       - name: Add Some Essential Folder
         run: |
           mkdir -p rootfs/runner && mkdir -p rootfs/app && mkdir -p rootfs/SunshineAI && mkdir -p rootfs/lost+found &&
@@ -65,14 +65,14 @@ jobs:
             cd /runner/macOS/Intel/x86_64 && curl -Ls https://micro.mamba.pm/api/micromamba/osx-64/latest | tar -xvj && 
             cd /runner/macOS/Silicon/M1/ARM64 && curl -Ls https://micro.mamba.pm/api/micromamba/osx-arm64/latest | tar -xvj 
           "
-      
+
       - name: DATA Folder Init
         run: | 
           set -e 
           sudo chroot rootfs /bin/bash -c "
             export BASE_DIR="/DATA" && 
-            mkdir -p "/DATA" && 
-            mkdir -p "/DATA/AppData" && 
+            mkdir -p "/DATA" &&
+            mkdir -p "/DATA/AppData" &&
             mkdir -p "/DATA/Documents" &&
             mkdir -p "/DATA/Downloads" &&
             mkdir -p "/DATA/Gallery" &&
@@ -93,7 +93,7 @@ jobs:
             mkdir -p "/DATA/Media/Music" &&
             mkdir -p "/DATA/Media/TV_Shows" &&
             tree /DATA &&
-            echo "Create Folder Complete !!!" 
+            echo "Create Folder Complete !!!"
           "
 
       - name: Add Some Essential Repo
@@ -106,7 +106,7 @@ jobs:
             apt-get update && apt-get install -y wget apt-transport-https &&
             apt-get update && cd ~ &&
             curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz &&
-            sudo tar -C /usr -xzf ollama-linux-amd64.tgz && rm -rf ollama-linux-amd64.tgz &&
+            sudo tar -C /usr -xzf ollama-linux-amd64.tgz &&
             sudo useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama &&
             sudo usermod -a -G ollama root && 
             sudo usermod -a -G ollama Administrator && 
@@ -115,8 +115,8 @@ jobs:
 
       - name: Remove Compress
         run: |
-          sudo chroot rootfs /bin/bash -c "sudo rm -rf ollama-linux-amd64.tgz"         
-          
+          sudo chroot rootfs /bin/bash -c "sudo rm -rf ollama-linux-amd64.tgz"
+           
       - name: ADD SunshineAI Software Installer  
         run: | 
           set -e 
@@ -142,10 +142,6 @@ jobs:
           sudo chmod 777 ./rootfs/bin/hfd
           sudo cp ./scripts/chroot-cleaner ./rootfs/bin/image-cleaner
           sudo chmod 777 ./rootfs/bin/image-cleaner
-          sudo cp ./scripts/service-installer ./rootfs/bin/service-installer
-          sudo chmod 777 ./rootfs/bin/service-installer
-          sudo cp init.d/mysql ./rootfs/etc/init.d/mysql
-          sudo chmod +x ./rootfs/etc/init.d/mysql
           sudo cp wsl.conf ./rootfs/etc/wsl.conf
           sudo chmod 644 ./rootfs/etc/wsl.conf
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/mysql-installer-sunshineai"
@@ -154,7 +150,7 @@ jobs:
           sudo umount -lf ./rootfs/dev
           sudo umount -lf ./rootfs/proc
           sudo umount -lf ./rootfs/sys
-    
+
       - name: Tar the rootfs
         run: |
           cd rootfs
@@ -177,8 +173,8 @@ jobs:
         id: vars
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-          IMAGE_NAME="debian-rootfs-distrobox:$TIMESTAMP"
-          LATEST_IMAGE="debian-rootfs-distrobox:latest"
+          IMAGE_NAME="sunshineai-debian-bookworm:$TIMESTAMP"
+          LATEST_IMAGE="sunshineai-debian-bookworm:xfce"
           FULL_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/$IMAGE_NAME"
           LATEST_FULL_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/$LATEST_IMAGE"
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
@@ -188,7 +184,7 @@ jobs:
       - name: Check if Image Exists
         id: check-image
         run: |
-          IMAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" "https://${{ secrets.DOCKER_REGISTRY }}/v2/debian-rootfs-distrobox/tags/list" | grep -c "200")
+          IMAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" "https://${{ secrets.DOCKER_REGISTRY }}/v2/sunshineai-debian-bookworm/tags/list" | grep -c "200")
           if [ "$IMAGE_EXISTS" -eq 0 ]; then
             echo "Image does not exist. It will be created."
           else
@@ -218,10 +214,10 @@ jobs:
         run: |
           docker tag "${{ env.FULL_IMAGE_NAME }}" "${{ env.LATEST_FULL_IMAGE_NAME }}"
           docker push "${{ env.LATEST_FULL_IMAGE_NAME }}"
-          echo "Updated latest tag to: ${{ env.LATEST_FULL_IMAGE_NAME }}"          
-        
+          echo "Updated latest tag to: ${{ env.LATEST_FULL_IMAGE_NAME }}"
+
       - name: Upload rootfs tarball
         uses: actions/upload-artifact@v4
         with:
-          name: SunshineAI-RootFS-DistroBox
+          name: SunshineAI-RootFS-Xfce
           path: debian-rootfs.tar

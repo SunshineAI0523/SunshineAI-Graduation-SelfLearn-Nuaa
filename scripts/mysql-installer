@@ -21,7 +21,18 @@ case "$DEBIAN_CODENAME" in
         MYSQL_TAR_URL="https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-server_${MYSQL_VERSION}-1debian12_amd64.deb-bundle.tar"
         INSTALL_DIR="/SunshineAI/MySQL-Server-8-Debian12/"
         ;;
+    jammy)
+        MYSQL_VERSION="8.0.41"
+        MYSQL_TAR_URL="https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-server_${MYSQL_VERSION}-1ubuntu22.04_amd64.deb-bundle.tar"
+        INSTALL_DIR="/SunshineAI/MySQL-Server-8-Ubuntu2204/"
+        ;;
+    focal)
+        MYSQL_VERSION="8.0.41"
+        MYSQL_TAR_URL="https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-server_${MYSQL_VERSION}-1ubuntu20.04_amd64.deb-bundle.tar"
+        INSTALL_DIR="/SunshineAI/MySQL-Server-8-Ubuntu2004/"
+        ;;        
     *)
+    https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-server_8.0.41-1ubuntu22.04_amd64.deb-bundle.tar
         echo "不支持的Debian版本代号: $DEBIAN_CODENAME"
         exit 1
         ;;

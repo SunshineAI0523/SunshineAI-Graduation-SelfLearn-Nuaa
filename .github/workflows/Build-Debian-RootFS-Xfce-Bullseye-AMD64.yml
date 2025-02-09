@@ -142,10 +142,6 @@ jobs:
           sudo chmod 777 ./rootfs/bin/hfd
           sudo cp ./scripts/chroot-cleaner ./rootfs/bin/image-cleaner
           sudo chmod 777 ./rootfs/bin/image-cleaner
-          sudo cp ./scripts/service-installer ./rootfs/bin/service-installer
-          sudo chmod 777 ./rootfs/bin/service-installer
-          sudo cp init.d/mysql ./rootfs/etc/init.d/mysql
-          sudo chmod +x ./rootfs/etc/init.d/mysql
           sudo cp wsl.conf ./rootfs/etc/wsl.conf
           sudo chmod 644 ./rootfs/etc/wsl.conf          
           sudo chroot rootfs /bin/bash -c "sudo bash /bin/mysql-installer-sunshineai"

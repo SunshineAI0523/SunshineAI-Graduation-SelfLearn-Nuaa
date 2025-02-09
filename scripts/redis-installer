@@ -21,6 +21,12 @@ case "$DEBIAN_CODENAME" in
     bookworm)
         REDIS_SOURCE="deb [signed-by=$REDIS_KEYRING] https://packages.redis.io/deb bookworm main"
         ;;
+    focal)
+        REDIS_SOURCE="deb [signed-by=$REDIS_KEYRING] https://packages.redis.io/deb focal main"
+        ;;
+    jammy)
+        REDIS_SOURCE="deb [signed-by=$REDIS_KEYRING] https://packages.redis.io/deb jammy main"
+        ;;        
     *)
         echo "不支持的Debian版本代号: $DEBIAN_CODENAME"
         exit 1
