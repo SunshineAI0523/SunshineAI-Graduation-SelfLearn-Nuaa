@@ -1,4 +1,4 @@
-name: Debian-RootFS-DistroBox-Bullseye x86-64 Pull and Save Docker Image
+name: Sunshineai-Debian-Bullseye Pull and Save Docker Image
 on:
   # push:
   #   branches:
@@ -13,7 +13,7 @@ on:
       docker_images:
         description: '请填写docker镜像名称 多个用英文逗号分开'
         required: true
-        default: 'jamesmith0817/debian-rootfs-distrobox-bullseye'  # 设置默认的 Docker 镜像列表
+        default: 'jamesmith0817/sunshineai-debian-bullseye'  # 设置默认的 Docker 镜像列表
 
 jobs:
   pull_and_package:
@@ -38,11 +38,11 @@ jobs:
 
     - name: Pull Docker Images and Package
       run: |
-        # # images="jamesmith0817/debian-rootfs-distrobox-bullseye"
+        # # images="jamesmith0817/sunshineai-debian-bullseye"
         # IFS=',' read -r -a image_array <<< "$images"
         # for image in "${image_array[@]}"; do
-          docker pull jamesmith0817/debian-rootfs-distrobox-bullseye --platform "linux/amd64"
-          docker save jamesmith0817/debian-rootfs-distrobox-bullseye -o "debian-rootfs-distrobox-bullseye-amd64.tar"
+          docker pull jamesmith0817/sunshineai-debian-bullseye --platform "linux/amd64"
+          docker save jamesmith0817/sunshineai-debian-bullseye -o "debian-rootfs-distrobox-bullseye-amd64.tar"
         # done
 
     - name: Compress the TAR files
