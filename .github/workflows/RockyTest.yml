@@ -31,17 +31,17 @@ jobs:
         rpm --root /rootfs --initdb
         dnf install -y --releasever 9 --installroot /rootfs \
         --setopt=install_weak_deps=False --nodocs \
-        rocky-release
+        rocky-release sudo dnf 
 
     - name: Configure repositories
       run: |
         cp /etc/yum.repos.d/rocky* /rootfs/etc/yum.repos.d/
-        chroot /rootfs dnf config-manager --set-enabled crb
-        chroot /rootfs dnf install -y epel-release
+        chroot /rootfs sudo dnf config-manager --set-enabled crb
+        chroot /rootfs sudo dnf install -y epel-release
 
     - name: Install base packages
       run: |
-        chroot /rootfs dnf install -y \
+        chroot /rootfs sudo dnf install -y \
         bash-completion bc bzip2 curl diffutils findutils \
         glibc-locale-source glibc-langpack-en gnupg hostname \
         iputils keyutils less libvte-2* lsof man man-pages mtr \
