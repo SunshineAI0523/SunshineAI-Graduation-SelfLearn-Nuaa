@@ -27,7 +27,7 @@ jobs:
 
     - name: Initialize rootfs
       run: |
-        mkdir -p /rootfs/{etc,var/lib/rpm}
+        mkdir -p /rootfs/{etc,var/lib/rpm,dev,proc,sys}
         rpm --root /rootfs --initdb
         sudo mount --bind /dev /rootfs/dev
         sudo mount --bind /proc /rootfs/proc
