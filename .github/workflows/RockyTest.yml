@@ -34,7 +34,7 @@ jobs:
         sudo mount --bind /sys /rootfs/sys
         dnf install -y --releasever 9 --installroot /rootfs \
         --setopt=install_weak_deps=False --nodocs \
-        rocky-release sudo dnf* 
+        rocky-release sudo dnf* ca-certificates*
         sudo umount -lf /rootfs/dev
         sudo umount -lf /rootfs/proc
         sudo umount -lf /rootfs/sys
