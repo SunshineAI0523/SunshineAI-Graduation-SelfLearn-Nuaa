@@ -30,7 +30,7 @@ jobs:
       - name: Bootstrap Debian rootfs
         run: |
           set -e
-          DEBIAN_FRONTEND=noninteractive sudo debootstrap --variant=buildd --arch=amd64 bullseye rootfs http://deb.debian.org/debian
+          DEBIAN_FRONTEND=noninteractive sudo debootstrap --variant=buildd --arch=amd64 --no-check-gpg bullseye rootfs http://cdn-fastly.deb.debian.org/debian
 
       - name: Install required packages
         run: |

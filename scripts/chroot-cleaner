@@ -5,7 +5,8 @@ echo "开始清理系统缓存和垃圾文件..."
 # 清理 apt 缓存
 echo "清理 APT 缓存..."
 sudo apt-get clean
-sudo apt-get autoclean
+sudo apt-get autoclean 
+sudoo apt autoremove -y 
 
 # 清理日志文件
 echo "清理旧日志文件..."

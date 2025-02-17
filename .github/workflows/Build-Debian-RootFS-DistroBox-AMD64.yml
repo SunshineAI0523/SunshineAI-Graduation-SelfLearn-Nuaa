@@ -30,7 +30,7 @@ jobs:
       - name: Bootstrap Debian rootfs
         run: |
           set -e
-          DEBIAN_FRONTEND=noninteractive sudo debootstrap --variant=buildd --arch=amd64 bookworm rootfs http://deb.debian.org/debian
+          DEBIAN_FRONTEND=noninteractive sudo debootstrap --variant=buildd --arch=amd64 --no-check-gpg bookworm rootfs http://cdn-fastly.deb.debian.org/debian
 
       - name: Install required packages
         run: |
