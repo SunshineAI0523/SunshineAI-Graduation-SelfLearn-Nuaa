@@ -46,7 +46,7 @@ main() {
   TAR_FILE="micromamba_$OS_ARCH.tar.bz2"
 
   # Create target directory
-  mkdir -p "$TARGET_DIR"
+  sudo mkdir -vp "$TARGET_DIR"
 
   # Download the file
   echo "Downloading micromamba for $OS_ARCH..."

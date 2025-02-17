@@ -25,7 +25,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y sudo qemu-user-static qemu-utils qemu-system-common debootstrap cdebootstrap && tree && df -h 
 
       - name: Create working directory
-        run: mkdir -p rootfs && tree
+        run: sudo mkdir -vp rootfs && tree
 
       - name: Bootstrap Debian rootfs
         run: |
@@ -47,13 +47,13 @@ jobs:
       
       - name: Add Some Essential Folder
         run: |
-          mkdir -p rootfs/runner && mkdir -p rootfs/app && mkdir -p rootfs/SunshineAI && mkdir -p rootfs/lost+found &&
-          mkdir -p rootfs/runner/Linux/x86_64 &&
-          mkdir -p rootfs/runner/Linux/ARM64 &&
-          mkdir -p rootfs/runner/Linux/Power &&
-          mkdir -p rootfs/runner/macOS/Intel/x86_64 &&
-          mkdir -p rootfs/runner/macOS/Silicon/M1/ARM64 &&
-          mkdir -p rootfs/DATA/{AppData,Documents,Downloads,Gallery,Media/{Movies,Music,"TV Shows"}}
+          sudo mkdir -vp rootfs/runner && sudo mkdir -vp rootfs/app && sudo mkdir -vp rootfs/SunshineAI && sudo mkdir -vp rootfs/lost+found &&
+          sudo mkdir -vp rootfs/runner/Linux/x86_64 &&
+          sudo mkdir -vp rootfs/runner/Linux/ARM64 &&
+          sudo mkdir -vp rootfs/runner/Linux/Power &&
+          sudo mkdir -vp rootfs/runner/macOS/Intel/x86_64 &&
+          sudo mkdir -vp rootfs/runner/macOS/Silicon/M1/ARM64 &&
+          sudo mkdir -vp rootfs/DATA/{AppData,Documents,Downloads,Gallery,Media/{Movies,Music,"TV Shows"}}
 
       - name: Init Runner Files
         run: |
@@ -71,27 +71,27 @@ jobs:
           set -e 
           sudo chroot rootfs /bin/bash -c "
             export BASE_DIR="/DATA" && 
-            mkdir -p "/DATA" && 
-            mkdir -p "/DATA/AppData" && 
-            mkdir -p "/DATA/Documents" &&
-            mkdir -p "/DATA/Downloads" &&
-            mkdir -p "/DATA/Gallery" &&
-            mkdir -p "/DATA/Compressed" &&
-            mkdir -p "/DATA/Desktop" &&
-            mkdir -p "/DATA/Games" &&
-            mkdir -p "/DATA/General" &&
-            mkdir -p "/DATA/ISOS" &&
-            mkdir -p "/DATA/Media" &&
-            mkdir -p "/DATA/Others" &&
-            mkdir -p "/DATA/Programs" &&
-            mkdir -p "/DATA/Public" &&
-            mkdir -p "/DATA/Templates" &&
-            mkdir -p "/DATA/Tools" &&
-            mkdir -p "/DATA/Torrents" &&
-            mkdir -p "/DATA/Videos" &&
-            mkdir -p "/DATA/Media/Movies" &&
-            mkdir -p "/DATA/Media/Music" &&
-            mkdir -p "/DATA/Media/TV_Shows" &&
+            sudo mkdir -vp "/DATA" && 
+            sudo mkdir -vp "/DATA/AppData" && 
+            sudo mkdir -vp "/DATA/Documents" &&
+            sudo mkdir -vp "/DATA/Downloads" &&
+            sudo mkdir -vp "/DATA/Gallery" &&
+            sudo mkdir -vp "/DATA/Compressed" &&
+            sudo mkdir -vp "/DATA/Desktop" &&
+            sudo mkdir -vp "/DATA/Games" &&
+            sudo mkdir -vp "/DATA/General" &&
+            sudo mkdir -vp "/DATA/ISOS" &&
+            sudo mkdir -vp "/DATA/Media" &&
+            sudo mkdir -vp "/DATA/Others" &&
+            sudo mkdir -vp "/DATA/Programs" &&
+            sudo mkdir -vp "/DATA/Public" &&
+            sudo mkdir -vp "/DATA/Templates" &&
+            sudo mkdir -vp "/DATA/Tools" &&
+            sudo mkdir -vp "/DATA/Torrents" &&
+            sudo mkdir -vp "/DATA/Videos" &&
+            sudo mkdir -vp "/DATA/Media/Movies" &&
+            sudo mkdir -vp "/DATA/Media/Music" &&
+            sudo mkdir -vp "/DATA/Media/TV_Shows" &&
             tree /DATA && 
             echo "Create Folder Complete !!!"
           "
