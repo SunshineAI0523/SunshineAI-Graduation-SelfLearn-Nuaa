@@ -30,7 +30,7 @@ jobs:
       - name: Bootstrap Debian rootfs
         run: |
           set -e
-          DEBIAN_FRONTEND=noninteractive cdebootstrap --foreign --include=ca-certificates --arch=amd64 bookworm rootfs https://cdn-fastly.deb.debian.org/debian
+          DEBIAN_FRONTEND=noninteractive sudo cdebootstrap --foreign --include=ca-certificates --arch=amd64 bookworm rootfs https://cdn-fastly.deb.debian.org/debian
 
       - name: Install required packages
         run: |
