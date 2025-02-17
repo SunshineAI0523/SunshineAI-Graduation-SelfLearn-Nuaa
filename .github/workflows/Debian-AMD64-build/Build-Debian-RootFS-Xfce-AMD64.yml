@@ -22,7 +22,7 @@ jobs:
           sudo bash ./scripts/envcleaner.sh
         
       - name: Set up QEMU user mode emulator (for debootstrap)
-        run: sudo apt-get update && sudo apt-get install -y sudo qemu-user-static qemu-utils qemu-system-common debootstrap && tree && df -h 
+        run: sudo apt-get update && sudo apt-get install -y sudo qemu-user-static qemu-utils qemu-system-common debootstrap cdebootstrap && tree && df -h 
 
       - name: Create working directory
         run: mkdir -p rootfs && tree
@@ -30,7 +30,7 @@ jobs:
       - name: Bootstrap Debian rootfs
         run: |
           set -e
-          DEBIAN_FRONTEND=noninteractive sudo debootstrap --variant=buildd --arch=amd64 --no-check-gpg bookworm rootfs http://cdn-fastly.deb.debian.org/debian
+          DEBIAN_FRONTEND=noninteractive cdebootstrap --foreign --include=ca-certificates --arch=amd64 bookworm rootfs https://cdn-fastly.deb.debian.org/debian
 
       - name: Install required packages
         run: |
